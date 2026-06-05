@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.student.dashboard.server.service.ExamServiceTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.195 s -- in com.student.dashboard.server.service.ExamServiceTest
