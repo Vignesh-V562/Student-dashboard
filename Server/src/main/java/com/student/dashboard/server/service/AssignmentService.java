@@ -1,12 +1,19 @@
 package com.student.dashboard.server.service;
 
 import com.student.dashboard.server.dto.AssignmentDTO;
+import com.student.dashboard.server.dto.AssignmentSubmissionDTO;
 import com.student.dashboard.server.entity.Assignment;
+import com.student.dashboard.server.entity.AssignmentSubmission;
+import com.student.dashboard.server.entity.User;
+import com.student.dashboard.server.entity.Subject;
 import com.student.dashboard.server.repository.AssignmentRepository;
+import com.student.dashboard.server.repository.AssignmentSubmissionRepository;
+import com.student.dashboard.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,37 +22,36 @@ import java.util.UUID;
 public class AssignmentService {
 
     private final AssignmentRepository assignmentRepository;
+    private final AssignmentSubmissionRepository submissionRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<AssignmentDTO> getAllAssignments(UUID studentUuid) {
-        return assignmentRepository.findByStudentUuid(studentUuid).stream()
+    public List<AssignmentDTO> getAllAssignments() {
+        return assignmentRepository.findAll().stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<AssignmentDTO> getPendingAssignments(UUID studentUuid) {
-        return assignmentRepository.findByStudentUuidAndCompleted(studentUuid, false).stream()
+    public List<AssignmentDTO> getAssignmentsForTeacher(UUID teacherUuid) {
+        return assignmentRepository.findByTeacherUuid(teacherUuid).stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Transactional
-    public AssignmentDTO createAssignment(AssignmentDTO dto, UUID studentUuid) {
-        com.student.dashboard.server.entity.User student = new com.student.dashboard.server.entity.User();
-        student.setUuid(studentUuid);
-
-        com.student.dashboard.server.entity.Subject subject = new com.student.dashboard.server.entity.Subject();
+    public AssignmentDTO createAssignment(AssignmentDTO dto, UUID teacherUuid) {
+        User teacher = userRepository.findByUuid(teacherUuid)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+        Subject subject = new Subject();
         subject.setUuid(dto.getSubjectUuid());
 
         Assignment assignment = new Assignment();
         assignment.setTitle(dto.getTitle());
         assignment.setDescription(dto.getDescription());
         assignment.setDueDate(dto.getDueDate());
-        assignment.setStudent(student);
+        assignment.setTeacher(teacher);
         assignment.setSubject(subject);
-        assignment.setCompleted(dto.isCompleted());
-        assignment.setScore(dto.getScore());
 
         return toDto(assignmentRepository.save(assignment));
     }
@@ -58,8 +64,6 @@ public class AssignmentService {
         assignment.setTitle(dto.getTitle());
         assignment.setDescription(dto.getDescription());
         assignment.setDueDate(dto.getDueDate());
-        assignment.setCompleted(dto.isCompleted());
-        assignment.setScore(dto.getScore());
 
         return toDto(assignmentRepository.save(assignment));
     }
@@ -72,9 +76,37 @@ public class AssignmentService {
     }
 
     @Transactional
-    @SuppressWarnings("null")
-    public Assignment saveAssignment(Assignment assignment) {
-        return assignmentRepository.save(assignment);
+    public AssignmentSubmissionDTO submitAssignment(UUID assignmentUuid, UUID studentUuid, String content) {
+        Assignment assignment = assignmentRepository.findByUuid(assignmentUuid)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+        User student = userRepository.findByUuid(studentUuid)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        AssignmentSubmission submission = submissionRepository.findByAssignmentUuidAndStudentUuid(assignmentUuid, studentUuid)
+                .orElse(new AssignmentSubmission());
+
+        submission.setAssignment(assignment);
+        submission.setStudent(student);
+        submission.setContent(content);
+        submission.setSubmittedAt(LocalDateTime.now());
+
+        return toSubmissionDto(submissionRepository.save(submission));
+    }
+
+    @Transactional(readOnly = true)
+    public List<AssignmentSubmissionDTO> getSubmissionsForAssignment(UUID assignmentUuid) {
+        return submissionRepository.findByAssignmentUuid(assignmentUuid).stream()
+                .map(this::toSubmissionDto)
+                .toList();
+    }
+
+    @Transactional
+    public AssignmentSubmissionDTO gradeSubmission(UUID submissionUuid, Integer score, String feedback) {
+        AssignmentSubmission submission = submissionRepository.findByUuid(submissionUuid)
+                .orElseThrow(() -> new RuntimeException("Submission not found"));
+        submission.setScore(score);
+        submission.setFeedback(feedback);
+        return toSubmissionDto(submissionRepository.save(submission));
     }
 
     private AssignmentDTO toDto(Assignment assignment) {
@@ -85,8 +117,20 @@ public class AssignmentService {
                 .dueDate(assignment.getDueDate())
                 .subjectName(assignment.getSubject().getName())
                 .subjectUuid(assignment.getSubject().getUuid())
-                .completed(assignment.isCompleted())
-                .score(assignment.getScore())
+                .build();
+    }
+
+    private AssignmentSubmissionDTO toSubmissionDto(AssignmentSubmission sub) {
+        return AssignmentSubmissionDTO.builder()
+                .uuid(sub.getUuid())
+                .assignmentUuid(sub.getAssignment().getUuid())
+                .assignmentTitle(sub.getAssignment().getTitle())
+                .studentUuid(sub.getStudent().getUuid())
+                .studentName(sub.getStudent().getUsername())
+                .content(sub.getContent())
+                .submittedAt(sub.getSubmittedAt())
+                .score(sub.getScore())
+                .feedback(sub.getFeedback())
                 .build();
     }
 }

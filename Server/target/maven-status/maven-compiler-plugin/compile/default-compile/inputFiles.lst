@@ -7,10 +7,14 @@ C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\jav
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\controller\AuthController.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\controller\DashboardController.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\controller\ExamController.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\controller\GradeController.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\controller\MessageController.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\controller\ReportController.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\controller\ScheduleController.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\controller\StudentRosterController.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\ApiResponse.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\AssignmentDTO.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\AssignmentSubmissionDTO.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\AttendanceCalendarDTO.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\AttendanceDTO.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\AttendanceSummaryDTO.java
@@ -18,11 +22,14 @@ C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\jav
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\ExamDTO.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\JwtResponse.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\LoginRequest.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\MarkAttendanceRequest.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\MessageDTO.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\MessageRequest.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\ScheduleEntryDTO.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\SignupRequest.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\dto\UserProfileDTO.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\Assignment.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\AssignmentSubmission.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\Attendance.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\BaseEntity.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\Course.java
@@ -30,6 +37,7 @@ C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\jav
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\enums\ExamStatus.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\enums\UserRole.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\Exam.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\Grade.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\Message.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\ScheduleEntry.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\entity\Subject.java
@@ -37,10 +45,12 @@ C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\jav
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\exception\GlobalExceptionHandler.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\mapper\ExamMapper.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\AssignmentRepository.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\AssignmentSubmissionRepository.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\AttendanceRepository.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\CourseRepository.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\EnrollmentRepository.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\ExamRepository.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\GradeRepository.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\MessageRepository.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\ScheduleEntryRepository.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\repository\SubjectRepository.java
@@ -55,5 +65,6 @@ C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\jav
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\service\AttendanceService.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\service\DashboardService.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\service\ExamService.java
+C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\service\GradeService.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\service\MessageService.java
 C:\Users\SSN\OneDrive - SSN Trust\Pictures\Student dashboard\Server\src\main\java\com\student\dashboard\server\service\ScheduleService.java

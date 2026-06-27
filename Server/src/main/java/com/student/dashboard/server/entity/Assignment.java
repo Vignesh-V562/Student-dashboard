@@ -29,12 +29,6 @@ public class Assignment extends BaseEntity {
     private Subject subject;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", nullable = false)
-    private User student;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private boolean completed = false;
-
-    private Integer score;
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private User teacher;
 }

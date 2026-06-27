@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -88,7 +87,7 @@ public class AuthController {
                                 .username(signUpRequest.getUsername())
                                 .email(signUpRequest.getEmail())
                                 .passwordHash(encoder.encode(signUpRequest.getPassword()))
-                                .role(com.student.dashboard.server.entity.enums.UserRole.STUDENT) // Default to STUDENT
+                                .role(signUpRequest.getRole() != null && signUpRequest.getRole().equalsIgnoreCase("TEACHER") ? com.student.dashboard.server.entity.enums.UserRole.TEACHER : com.student.dashboard.server.entity.enums.UserRole.STUDENT)
                                 .active(true)
                                 .build();
 

@@ -7,23 +7,26 @@ interface MainContentProps {
   activeTab: string;
   setDarkMode: (dark: boolean) => void;
   username?: string;
+  userRole?: string;
   children?: React.ReactNode;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ darkMode, activeTab, setDarkMode, username, children }) => {
+const MainContent: React.FC<MainContentProps> = ({ darkMode, activeTab, setDarkMode, username, userRole, children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const getPageTitle = () => {
     switch (activeTab) {
       case 'Exams': return 'Exams';
       case 'Overview': return 'Dashboard Overview';
-      case 'Class Preparation': return 'Class Preparation';
       case 'Attendance': return 'Attendance Records';
       case 'Assignments': return 'Assignments';
       case 'Schedule': return 'Weekly Schedule';
       case 'GPA Calculator': return 'GPA Calculator';
-      case 'Analytics': return 'Academic Analytics';
-      case 'Reports': return 'Academic Reports';
       case 'Messages': return 'Messages';
+      case 'Manage Exams': return 'Manage Exams';
+      case 'Manage Assignments': return 'Manage Assignments';
+      case 'Mark Attendance': return 'Mark Attendance';
+      case 'Student Roster': return 'Student Roster';
       default: return activeTab;
     }
   };
@@ -31,46 +34,39 @@ const MainContent: React.FC<MainContentProps> = ({ darkMode, activeTab, setDarkM
   const getPageSubtitle = () => {
     switch (activeTab) {
       case 'Exams': return 'View your upcoming examination schedule and details.';
-      case 'Overview': return `Welcome back, ${username ?? 'Student'}! Here is what is happening with your studies.`;
-      default: return `Manage your ${activeTab.toLowerCase()} and tracks.`;
+      case 'Overview': return `Welcome back, ${username ?? 'User'}! Here is what is happening with your studies.`;
+      case 'Manage Exams': return 'Create and manage examinations for your students.';
+      case 'Manage Assignments': return 'Assign homework and track student submissions.';
+      case 'Mark Attendance': return 'Record daily attendance for your classes.';
+      case 'Student Roster': return 'View all enrolled students and their academic standing.';
+      default: return `Manage your ${activeTab.toLowerCase()} and progress.`;
     }
   };
 
   return (
-    <div className="flex-1 h-full overflow-y-auto custom-scrollbar">
-      <div className="max-w-5xl mx-auto p-8">
-        {/* Header */}
+    <div className="h-full flex-1 overflow-y-auto custom-scrollbar">
+      <div className="mx-auto max-w-5xl p-8">
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-600'}`}>Home › {activeTab}</p>
+          <div className="mb-4 flex items-center justify-between">
+            <p className="glass-breadcrumb">Home › {activeTab}</p>
             <button
+              type="button"
               onClick={() => setDarkMode(!darkMode)}
-              className={`p-2 rounded-lg transition-all ${darkMode
-                ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700 hover:scale-110 active:scale-95'
-                : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 shadow-sm hover:scale-110 active:scale-95'
-                }`}
+              className="glass-btn-icon"
+              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {darkMode ? <Sun className="h-5 w-5 text-amber-300" /> : <Moon className="h-5 w-5" />}
             </button>
           </div>
-          <div className="flex items-start justify-between mb-2">
+          <div className="mb-2 flex items-start justify-between gap-4">
             <div>
-              <h1 className={`text-3xl font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'} mb-2`}>
-                {getPageTitle()}
-              </h1>
-              <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                {getPageSubtitle()}
-              </p>
+              <h1 className="glass-heading mb-2 text-3xl">{getPageTitle()}</h1>
+              <p className="glass-subtext">{getPageSubtitle()}</p>
             </div>
-            {activeTab === 'Exams' && (
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all font-medium ${darkMode
-                ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-500/20'
-                : 'bg-black text-white hover:bg-gray-800 shadow-lg shadow-black/10'
-                } active:scale-95`}>
-                <Plus className="w-4 h-4" />
-                Add new exam
+            {activeTab === 'Manage Exams' && userRole === 'TEACHER' && (
+              <button type="button" onClick={() => setIsModalOpen(true)} className="glass-btn-primary shrink-0">
+                <Plus className="h-4 w-4" />
+                Add exam
               </button>
             )}
           </div>
@@ -78,16 +74,11 @@ const MainContent: React.FC<MainContentProps> = ({ darkMode, activeTab, setDarkM
 
         {children}
       </div>
-      
+
       {isModalOpen && (
         <CreateExamModal
-          darkMode={darkMode}
           onClose={() => setIsModalOpen(false)}
-          onSuccess={() => {
-            // Can't easily refresh exams from here without a context/prop change,
-            // but the page can be forced to reload or just let the user see it on next fetch.
-            window.location.reload(); 
-          }}
+          onSuccess={() => window.location.reload()}
         />
       )}
     </div>

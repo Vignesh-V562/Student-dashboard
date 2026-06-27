@@ -27,6 +27,8 @@ export interface ExamApi {
     description?: string;
     scheduledAt: string;
     durationMinutes: number;
+    maxMarks?: number;
+    passingMarks?: number;
     courseName?: string;
     subjectName?: string;
     status: string;
@@ -105,3 +107,55 @@ export interface UpcomingExam {
     daysLeft: string;
     color: string;
 }
+
+export interface GradeApi {
+    id?: string;
+    userUuid?: string;
+    courseName: string;
+    credits: number;
+    gradeLetter: string;
+}
+
+export interface TeacherSummary {
+    totalStudents: number;
+    totalExams: number;
+    totalAssignments: number;
+    avgAttendance: number;
+}
+
+export interface StudentInfo {
+    uuid: string;
+    username: string;
+    email: string;
+    role: string;
+}
+
+export interface MarkAttendanceRequest {
+    studentUuid: string;
+    subjectUuid: string;
+    date: string;
+    present: boolean;
+}
+
+export interface AssignmentSubmissionDTO {
+    uuid: string;
+    assignmentUuid: string;
+    assignmentTitle: string;
+    studentUuid: string;
+    studentName: string;
+    content: string;
+    submittedAt: string;
+    score: number | null;
+    feedback: string | null;
+}
+
+export interface AttendanceTrend {
+    name: string;
+    attendance: number;
+}
+
+export interface GradeDistribution {
+    grade: string;
+    students: number;
+}
+

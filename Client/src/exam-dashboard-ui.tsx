@@ -4,7 +4,7 @@ import MainContent from './components/MainContent';
 import RightSidebar from './components/RightSidebar';
 import ResizeHandle from './components/ResizeHandle';
 import { useSidebarResizing } from './hooks/useSidebarResizing';
-import { MENU_ITEMS, daysUntil, examCardColor } from './constants/dashboard';
+import { STUDENT_MENU_ITEMS, TEACHER_MENU_ITEMS, daysUntil } from './constants/dashboard';
 import { useAuth } from './context/AuthContext';
 import { fetchUpcomingExams } from './services/api';
 import type { UpcomingExam } from './types';
@@ -16,11 +16,16 @@ import AttendancePage from './pages/Attendance';
 import SchedulePage from './pages/Schedule';
 import GPACalculatorPage from './pages/GPACalculator';
 import MessagesPage from './pages/Messages';
+import TeacherOverview from './pages/teacher/TeacherOverview';
+import ManageExams from './pages/teacher/ManageExams';
+import ManageAssignments from './pages/teacher/ManageAssignments';
+import MarkAttendance from './pages/teacher/MarkAttendance';
+import StudentRoster from './pages/teacher/StudentRoster';
 import { PanelRightClose, PanelRightOpen } from 'lucide-react';
 
 const ExamDashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview');
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') !== 'false');
   const [isRightSidebarCollapsed, setIsRightSidebarCollapsed] = useState(false);
   const [upcomingExams, setUpcomingExams] = useState<UpcomingExam[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,7 +49,7 @@ const ExamDashboard = () => {
       .then((res) => {
         if (res.success && res.data.content) {
           setUpcomingExams(
-            res.data.content.map((exam, idx) => {
+            res.data.content.map((exam) => {
               const scheduled = new Date(exam.scheduledAt);
               const end = new Date(scheduled.getTime() + (exam.durationMinutes ?? 60) * 60_000);
               return {
@@ -52,50 +57,64 @@ const ExamDashboard = () => {
                 date: scheduled.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
                 time: `${scheduled.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} - ${end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`,
                 daysLeft: daysUntil(scheduled),
-                color: examCardColor(darkMode, idx),
+                color: '',
               };
             })
           );
         }
       })
       .catch(() => setUpcomingExams([]));
-  }, [darkMode]);
+  }, []);
 
   const renderActivePage = () => {
     switch (activeTab) {
       case 'Overview':
-        return <OverviewPage darkMode={darkMode} />;
+        return user?.role === 'TEACHER' ? <TeacherOverview /> : <OverviewPage />;
       case 'Exams':
-        return <ExamsPage darkMode={darkMode} />;
+        return <ExamsPage />;
       case 'Assignments':
-        return <AssignmentsPage darkMode={darkMode} />;
+        return <AssignmentsPage />;
       case 'Attendance':
-        return <AttendancePage darkMode={darkMode} />;
+        return <AttendancePage />;
       case 'Schedule':
-        return <SchedulePage darkMode={darkMode} />;
+        return <SchedulePage />;
       case 'GPA Calculator':
-        return <GPACalculatorPage darkMode={darkMode} />;
+        return <GPACalculatorPage />;
       case 'Messages':
-        return <MessagesPage darkMode={darkMode} />;
+        return <MessagesPage />;
+      case 'Manage Exams':
+        return <ManageExams />;
+      case 'Manage Assignments':
+        return <ManageAssignments />;
+      case 'Mark Attendance':
+        return <MarkAttendance />;
+      case 'Student Roster':
+        return <StudentRoster />;
       default:
         return (
-          <div className={`flex flex-col items-center justify-center h-64 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-            <p className="text-lg font-medium mb-2">{activeTab}</p>
-            <p>This section is currently under development.</p>
+          <div className="glass-card flex flex-col items-center justify-center h-64 p-8">
+            <p className="glass-heading text-lg mb-2">{activeTab}</p>
+            <p className="glass-muted">This section is currently under development.</p>
           </div>
         );
     }
   };
 
+  const menuItems = user?.role === 'TEACHER' ? TEACHER_MENU_ITEMS : STUDENT_MENU_ITEMS;
+
   return (
     <div
       ref={containerRef}
-      className={`flex h-screen overflow-hidden font-sans ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}
+      data-theme={darkMode ? 'dark' : 'light'}
+      className="dashboard-scene relative flex h-screen overflow-hidden"
     >
-      <div style={{ width: `${leftWidth}px` }} className="h-full">
+      <div className="dashboard-mesh pointer-events-none absolute inset-0" aria-hidden />
+      <div className="dashboard-orb dashboard-orb-a absolute" aria-hidden />
+      <div className="dashboard-orb dashboard-orb-b absolute" aria-hidden />
+
+      <div style={{ width: `${leftWidth}px` }} className="relative z-10 h-full shrink-0">
         <LeftSidebar
-          darkMode={darkMode}
-          menuItems={MENU_ITEMS}
+          menuItems={menuItems}
           activeTab={activeTab}
           onPageChange={setActiveTab}
           user={user}
@@ -106,25 +125,22 @@ const ExamDashboard = () => {
       <ResizeHandle
         onMouseDown={() => setIsDraggingLeft(true)}
         isDragging={isDraggingLeft}
-        darkMode={darkMode}
       />
 
-      <div className="flex-1 flex flex-col min-w-0 relative">
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col">
         <MainContent
-          darkMode={darkMode}
           activeTab={activeTab}
           setDarkMode={setDarkMode}
+          darkMode={darkMode}
           username={user?.username}
+          userRole={user?.role}
         >
-          {renderActivePage()}
+          <div className="glass-page-enter">{renderActivePage()}</div>
         </MainContent>
         <button
           onClick={() => setIsRightSidebarCollapsed(!isRightSidebarCollapsed)}
-          className={`absolute top-6 right-6 p-2 rounded-lg transition-colors z-10 ${darkMode
-            ? 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-100'
-            : 'bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900 shadow-sm border border-gray-100'
-            }`}
-          title={isRightSidebarCollapsed ? 'Expand Right Sidebar' : 'Collapse Right Sidebar'}
+          className="glass-btn-icon absolute top-6 right-6 z-20"
+          title={isRightSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {isRightSidebarCollapsed ? <PanelRightOpen size={20} /> : <PanelRightClose size={20} />}
         </button>
@@ -134,15 +150,14 @@ const ExamDashboard = () => {
         <ResizeHandle
           onMouseDown={() => setIsDraggingRight(true)}
           isDragging={isDraggingRight}
-          darkMode={darkMode}
         />
       )}
 
       <div
         style={{ width: isRightSidebarCollapsed ? '0' : `${rightWidth}px` }}
-        className="h-full transition-all duration-300 overflow-hidden"
+        className="relative z-10 h-full shrink-0 overflow-hidden transition-all duration-300"
       >
-        <RightSidebar darkMode={darkMode} upcomingExams={upcomingExams} />
+        <RightSidebar upcomingExams={upcomingExams} />
       </div>
     </div>
   );

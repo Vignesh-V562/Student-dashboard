@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Search } from 'lucide-react';
-import { fetchMessages } from '../services/api';
+import { Search, Send } from 'lucide-react';
+import { fetchMessages, sendMessage } from '../services/api';
 import type { MessageApi } from '../types';
 
-interface MessagesPageProps {
-    darkMode: boolean;
-}
-
-const MessagesPage: React.FC<MessagesPageProps> = ({ darkMode }) => {
+const MessagesPage: React.FC = () => {
     const [messages, setMessages] = useState<MessageApi[]>([]);
     const [selected, setSelected] = useState<MessageApi | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [newMessage, setNewMessage] = useState('');
+    const [sending, setSending] = useState(false);
 
     useEffect(() => {
         fetchMessages()
@@ -28,24 +26,14 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ darkMode }) => {
             });
     }, []);
 
-    if (loading) return <div className="p-8 text-center text-gray-500">Loading messages...</div>;
-    if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
-
-    const [newMessage, setNewMessage] = useState('');
-    const [sending, setSending] = useState(false);
-
     const handleSendMessage = async () => {
         if (!selected || !newMessage.trim()) return;
         setSending(true);
         try {
-            const receiverUuid = selected.senderName === 'Unknown' ? selected.uuid : selected.uuid; // Simplification, normally need receiverUuid from thread
-            const res = await import('../services/api').then(api => api.sendMessage(receiverUuid, newMessage));
+            const res = await sendMessage(selected.uuid, newMessage);
             if (res.success) {
-                // Refresh messages
-                const data = await import('../services/api').then(api => api.fetchMessages());
-                if (data.success) {
-                    setMessages(data.data);
-                }
+                const data = await fetchMessages();
+                if (data.success) setMessages(data.data);
                 setNewMessage('');
             }
         } catch (err) {
@@ -55,71 +43,75 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ darkMode }) => {
         }
     };
 
+    if (loading) return <div className="glass-loading">Loading messages…</div>;
+    if (error) return <div className="auth-error rounded-xl p-4 text-center text-sm">{error}</div>;
+
     return (
-        <div className={`h-[500px] flex rounded-2xl border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} overflow-hidden shadow-sm`}>
-            <div className={`w-1/3 border-r flex flex-col ${darkMode ? 'border-gray-700' : 'border-gray-100'}`}>
-                <div className={`p-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-100'}`}>
+        <div className="glass-card flex h-[520px] overflow-hidden">
+            <div className="flex w-1/3 flex-col border-r border-white/10">
+                <div className="border-b border-white/10 p-4">
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            className={`w-full pl-10 pr-4 py-2 rounded-xl text-sm ${darkMode ? 'bg-gray-900 border-gray-700 text-gray-200' : 'bg-gray-50 border-gray-200'} border focus:outline-none`}
-                        />
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                        <input type="text" placeholder="Search…" className="glass-modal-input !py-2 pl-10 text-sm" />
                     </div>
                 </div>
-                <div className="overflow-y-auto flex-1 custom-scrollbar">
+                <div className="custom-scrollbar flex-1 overflow-y-auto">
                     {messages.length === 0 ? (
-                        <p className="p-4 text-sm text-gray-500">No messages yet.</p>
+                        <p className="glass-muted p-4 text-sm">No messages yet.</p>
                     ) : (
                         messages.map((msg) => (
                             <button
                                 key={msg.uuid}
                                 type="button"
                                 onClick={() => setSelected(msg)}
-                                className={`w-full text-left p-4 border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-50 hover:bg-gray-50'} ${selected?.uuid === msg.uuid ? (darkMode ? 'bg-gray-700' : 'bg-blue-50') : ''}`}
+                                className={`w-full border-b border-white/5 p-4 text-left transition-colors hover:bg-white/5 ${
+                                    selected?.uuid === msg.uuid ? 'bg-cyan-500/10 border-l-2 border-l-cyan-400' : ''
+                                }`}
                             >
-                                <p className={`text-sm font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{msg.senderName}</p>
-                                <p className={`text-xs truncate ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{msg.content}</p>
+                                <p className="glass-heading text-sm">{msg.senderName}</p>
+                                <p className="glass-muted truncate text-xs">{msg.content}</p>
                             </button>
                         ))
                     )}
                 </div>
             </div>
-            <div className="flex-1 flex flex-col">
+
+            <div className="flex flex-1 flex-col">
                 {selected ? (
                     <>
-                        <div className={`p-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-100'}`}>
-                            <p className={`font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{selected.senderName}</p>
-                            <p className="text-xs text-gray-500">{new Date(selected.createdAt).toLocaleString()}</p>
+                        <div className="border-b border-white/10 p-4">
+                            <p className="glass-heading text-sm">{selected.senderName}</p>
+                            <p className="glass-muted text-xs">{new Date(selected.createdAt).toLocaleString()}</p>
                         </div>
-                        <div className="flex-1 p-6 overflow-y-auto">
-                            <div className={`inline-block max-w-md p-4 rounded-2xl ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-gray-100 text-gray-800'}`}>
+                        <div className="flex-1 overflow-y-auto p-6">
+                            <div className="glass-exam-chip inline-block max-w-md !rounded-2xl">
                                 {selected.content}
                             </div>
                         </div>
-                        <div className={`p-4 border-t ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-100 bg-white'}`}>
+                        <div className="border-t border-white/10 p-4">
                             <div className="flex gap-2">
                                 <input
                                     type="text"
                                     value={newMessage}
                                     onChange={(e) => setNewMessage(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                                    placeholder="Type a message..."
-                                    className={`flex-1 px-4 py-2 rounded-xl text-sm border focus:outline-none ${darkMode ? 'bg-gray-900 border-gray-700 text-gray-200 focus:border-blue-500' : 'bg-gray-50 border-gray-200 focus:border-blue-500'}`}
+                                    placeholder="Type a message…"
+                                    className="glass-modal-input flex-1 text-sm"
                                 />
                                 <button
+                                    type="button"
                                     onClick={handleSendMessage}
                                     disabled={sending || !newMessage.trim()}
-                                    className={`px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors ${sending || !newMessage.trim() ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+                                    className="glass-btn-primary !mt-0 shrink-0 !rounded-xl !px-4 disabled:opacity-50"
                                 >
-                                    {sending ? 'Sending...' : 'Send'}
+                                    <Send className="h-4 w-4" />
+                                    {sending ? '…' : 'Send'}
                                 </button>
                             </div>
                         </div>
                     </>
                 ) : (
-                    <div className="flex-1 flex items-center justify-center text-gray-500">Select a message</div>
+                    <div className="glass-muted flex flex-1 items-center justify-center">Select a message</div>
                 )}
             </div>
         </div>

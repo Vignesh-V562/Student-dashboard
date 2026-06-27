@@ -7,7 +7,7 @@ interface AuthContextType {
     user: UserProfile | null;
     token: string | null;
     login: (credentials: { username: string; password: string }) => Promise<void>;
-    signup: (userData: { username: string; email: string; password: string }) => Promise<void>;
+    signup: (userData: { username: string; email: string; password: string; role?: string }) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
     loading: boolean;
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const signup = async (userData: { username: string; email: string; password: string }) => {
+    const signup = async (userData: { username: string; email: string; password: string; role?: string }) => {
         const data = await apiSignup(userData);
         if (!data.success) throw new Error(data.message || "Registration failed");
     };

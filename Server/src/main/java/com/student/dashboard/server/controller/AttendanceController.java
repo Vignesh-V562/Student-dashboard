@@ -10,9 +10,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import com.student.dashboard.server.dto.MarkAttendanceRequest;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -47,5 +51,18 @@ public class AttendanceController {
         return ResponseEntity.ok(ApiResponse.success(
                 attendanceService.getAttendanceOverview(userDetails.getUuid(), ym),
                 "Attendance overview retrieved successfully"));
+    }
+    @PostMapping("/mark")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Void>> markAttendance(@RequestBody MarkAttendanceRequest request) {
+        attendanceService.markAttendance(request);
+        return ResponseEntity.ok(ApiResponse.success(null, "Attendance marked successfully"));
+    }
+
+    @GetMapping("/students")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<List<AttendanceDTO>>> getAllStudentsAttendance() {
+        return ResponseEntity.ok(ApiResponse.success(
+            attendanceService.getAllStudentsAttendance(), "Students attendance retrieved"));
     }
 }

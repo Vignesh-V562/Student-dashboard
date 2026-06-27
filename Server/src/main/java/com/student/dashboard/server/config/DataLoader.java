@@ -66,10 +66,9 @@ public class DataLoader {
             if (assignmentRepository.count() == 0) {
                 assignmentRepository.saveAll(Arrays.asList(
                         Assignment.builder().title("Calculus Homework").description("Problems 1-10")
-                                .dueDate(LocalDateTime.now().plusDays(2)).subject(math).student(student).build(),
+                                .dueDate(LocalDateTime.now().plusDays(2)).subject(math).teacher(teacher).build(),
                         Assignment.builder().title("Essay on AI").description("Write 500 words")
-                                .dueDate(LocalDateTime.now().plusDays(5)).subject(english).student(student)
-                                .completed(true).score(92).build()));
+                                .dueDate(LocalDateTime.now().plusDays(5)).subject(english).teacher(teacher).build()));
             }
 
             if (attendanceRepository.count() == 0) {

@@ -18,11 +18,19 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.student.dashboard.server.dto.MarkAttendanceRequest;
+import com.student.dashboard.server.entity.User;
+import com.student.dashboard.server.entity.Subject;
+import com.student.dashboard.server.repository.UserRepository;
+import com.student.dashboard.server.repository.SubjectRepository;
+
 @Service
 @RequiredArgsConstructor
 public class AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
+    private final UserRepository userRepository;
+    private final SubjectRepository subjectRepository;
 
     @Transactional(readOnly = true)
     public List<AttendanceDTO> getAttendance(UUID studentUuid, LocalDate startDate, LocalDate endDate) {
@@ -77,5 +85,37 @@ public class AttendanceService {
                 .subjectUuid(attendance.getSubject().getUuid())
                 .present(attendance.isPresent())
                 .build();
+    }
+    @Transactional
+    public void markAttendance(MarkAttendanceRequest request) {
+        User student = userRepository.findByUuid(request.getStudentUuid())
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Subject subject = subjectRepository.findByUuid(request.getSubjectUuid())
+                .orElseThrow(() -> new RuntimeException("Subject not found"));
+        
+        attendanceRepository.findByStudentUuidAndSubjectUuidAndDate(
+                request.getStudentUuid(), request.getSubjectUuid(), request.getDate())
+            .ifPresentOrElse(
+                existing -> {
+                    existing.setPresent(request.isPresent());
+                    attendanceRepository.save(existing);
+                },
+                () -> {
+                    Attendance attendance = Attendance.builder()
+                            .student(student)
+                            .subject(subject)
+                            .date(request.getDate())
+                            .present(request.isPresent())
+                            .build();
+                    attendanceRepository.save(attendance);
+                }
+            );
+    }
+
+    @Transactional(readOnly = true)
+    public List<AttendanceDTO> getAllStudentsAttendance() {
+        return attendanceRepository.findAll().stream()
+                .map(this::toDto)
+                .toList();
     }
 }

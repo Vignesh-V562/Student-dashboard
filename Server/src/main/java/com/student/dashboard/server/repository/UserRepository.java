@@ -9,4 +9,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
     Optional<User> findByUuid(UUID uuid);
+    java.util.List<User> findByRole(com.student.dashboard.server.entity.enums.UserRole role);
+    long countByRole(com.student.dashboard.server.entity.enums.UserRole role);
 }

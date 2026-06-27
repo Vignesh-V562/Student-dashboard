@@ -8,6 +8,7 @@ import type {
     PageResponse,
     ScheduleEntryApi,
     UserProfile,
+    GradeApi,
 } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/api/v1';
@@ -34,6 +35,12 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<Api
         data: null,
     }));
 
+    if (response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        throw new Error('Session expired. Please log in again.');
+    }
+
     if (!response.ok) {
         throw new Error(data.message || `Request failed (${response.status})`);
     }
@@ -51,7 +58,7 @@ export const login = async (credentials: { username: string; password: string })
     return data;
 };
 
-export const signup = async (userData: { username: string; email: string; password: string }) => {
+export const signup = async (userData: { username: string; email: string; password: string; role?: string }) => {
     return apiFetch<null>('/auth/signup', {
         method: 'POST',
         body: JSON.stringify(userData),
@@ -97,4 +104,47 @@ export const sendMessage = (receiverUuid: string, content: string) => apiFetch<M
 
 export const fetchDashboardSummary = () => apiFetch<DashboardSummary>('/dashboard/summary');
 
+export const fetchGrades = () => apiFetch<GradeApi[]>('/grades');
+export const saveGrade = (grade: GradeApi) => apiFetch<GradeApi>('/grades', { method: 'POST', body: JSON.stringify(grade) });
+export const deleteGrade = (id: string) => apiFetch<void>(`/grades/${id}`, { method: 'DELETE' });
+
+import type { TeacherSummary, StudentInfo, MarkAttendanceRequest } from '../types';
+
+export const fetchTeacherSummary = () => apiFetch<TeacherSummary>('/dashboard/teacher-summary');
+export const fetchStudentRoster = () => apiFetch<StudentInfo[]>('/roster');
+export const markAttendance = (data: MarkAttendanceRequest) => apiFetch<void>('/attendance/mark', { method: 'POST', body: JSON.stringify(data) });
+export const fetchAllStudentsAttendance = () => apiFetch<any[]>('/attendance/students');
+
+import type { AssignmentSubmissionDTO, AttendanceTrend, GradeDistribution } from '../types';
+
+export const submitAssignment = (uuid: string, content: string) => apiFetch<AssignmentSubmissionDTO>(`/assignments/${uuid}/submit`, { method: 'POST', body: JSON.stringify({ content }) });
+export const fetchSubmissions = (uuid: string) => apiFetch<AssignmentSubmissionDTO[]>(`/assignments/${uuid}/submissions`);
+export const gradeSubmission = (uuid: string, score: number, feedback: string) => apiFetch<AssignmentSubmissionDTO>(`/assignments/submissions/${uuid}/grade`, { method: 'POST', body: JSON.stringify({ score, feedback }) });
+
+export const fetchAttendanceTrends = () => apiFetch<AttendanceTrend[]>('/dashboard/attendance-trends');
+export const fetchGradeDistribution = () => apiFetch<GradeDistribution[]>('/dashboard/grade-distribution');
+export const downloadAttendanceCsv = () => {
+    const token = localStorage.getItem('token');
+    window.open(`${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/api/v1'}/reports/attendance/csv?access_token=${token}`, '_blank');
+    // For proper auth via header, we would need to fetch blob and create object URL, but let's do the proper fetch blob approach:
+};
+
+export const downloadCsv = async () => {
+    const headers: Record<string, string> = {};
+    const token = localStorage.getItem('token');
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/api/v1'}/reports/attendance/csv`, { headers });
+    if (!response.ok) throw new Error('Failed to download report');
+    
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'attendance_report.csv';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+};
 

@@ -20,4 +20,23 @@ public class DashboardController {
     public ResponseEntity<ApiResponse<DashboardSummaryDTO>> getSummary() {
         return ResponseEntity.ok(ApiResponse.success(dashboardService.getSummary(), "Dashboard summary retrieved successfully"));
     }
+
+    @GetMapping("/teacher-summary")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getTeacherSummary() {
+        java.util.Map<String, Object> summary = dashboardService.getTeacherSummary();
+        return ResponseEntity.ok(ApiResponse.success(summary, "Teacher summary retrieved"));
+    }
+
+    @GetMapping("/attendance-trends")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<java.util.List<java.util.Map<String, Object>>>> getAttendanceTrends() {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getAttendanceTrends(), "Attendance trends retrieved"));
+    }
+
+    @GetMapping("/grade-distribution")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<java.util.List<java.util.Map<String, Object>>>> getGradeDistribution() {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getGradeDistribution(), "Grade distribution retrieved"));
+    }
 }

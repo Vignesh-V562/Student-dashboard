@@ -9,9 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
-    List<Assignment> findByStudentUuid(UUID studentUuid);
-
-    List<Assignment> findByStudentUuidAndCompleted(UUID studentUuid, boolean completed);
+    List<Assignment> findByTeacherUuid(UUID teacherUuid);
 
     java.util.Optional<Assignment> findByUuid(UUID uuid);
 }
