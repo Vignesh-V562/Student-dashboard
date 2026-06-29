@@ -10,8 +10,10 @@ com\student\dashboard\server\dto\AssignmentSubmissionDTO$AssignmentSubmissionDTO
 com\student\dashboard\server\entity\User$UserBuilder.class
 com\student\dashboard\server\entity\BaseEntity.class
 com\student\dashboard\server\repository\AttendanceRepository.class
+com\student\dashboard\server\dto\AiChatRequest$AiChatRequestBuilder.class
 com\student\dashboard\server\repository\SubjectRepository.class
 com\student\dashboard\server\service\AssignmentService.class
+com\student\dashboard\server\service\GroqAiService.class
 com\student\dashboard\server\entity\Assignment$AssignmentBuilder.class
 com\student\dashboard\server\repository\GradeRepository.class
 com\student\dashboard\server\entity\Subject.class
@@ -49,6 +51,7 @@ com\student\dashboard\server\entity\Grade$GradeBuilder.class
 com\student\dashboard\server\service\GradeService.class
 com\student\dashboard\server\dto\UserProfileDTO$UserProfileDTOBuilder.class
 com\student\dashboard\server\dto\AssignmentDTO.class
+com\student\dashboard\server\dto\AiChatResponse.class
 com\student\dashboard\server\security\UserDetailsImpl.class
 com\student\dashboard\server\entity\BaseEntity$BaseEntityBuilder.class
 com\student\dashboard\server\entity\Subject$SubjectBuilder.class
@@ -68,6 +71,7 @@ com\student\dashboard\server\config\DataLoader.class
 com\student\dashboard\server\dto\AssignmentDTO$AssignmentDTOBuilder.class
 com\student\dashboard\server\entity\Exam.class
 com\student\dashboard\server\mapper\ExamMapper.class
+com\student\dashboard\server\dto\AiChatRequest$AiChatMessage.class
 com\student\dashboard\server\entity\AssignmentSubmission.class
 com\student\dashboard\server\config\CorsConfig$1.class
 com\student\dashboard\server\entity\Enrollment$EnrollmentBuilder.class
@@ -78,6 +82,7 @@ com\student\dashboard\server\dto\AssignmentSubmissionDTO.class
 com\student\dashboard\server\config\WebSecurityConfig.class
 com\student\dashboard\server\entity\Exam$ExamBuilderImpl.class
 com\student\dashboard\server\entity\User$UserBuilderImpl.class
+com\student\dashboard\server\dto\AiChatRequest$AiChatMessage$AiChatMessageBuilder.class
 com\student\dashboard\server\entity\Assignment$AssignmentBuilderImpl.class
 com\student\dashboard\server\entity\ScheduleEntry$ScheduleEntryBuilder.class
 com\student\dashboard\server\entity\Message$MessageBuilderImpl.class
@@ -88,15 +93,19 @@ com\student\dashboard\server\entity\enums\UserRole.class
 com\student\dashboard\server\repository\AssignmentRepository.class
 com\student\dashboard\server\entity\Message$MessageBuilder.class
 com\student\dashboard\server\entity\Grade.class
+com\student\dashboard\server\dto\AiChatRequest.class
 com\student\dashboard\server\entity\Enrollment.class
+com\student\dashboard\server\dto\AiChatResponse$AiChatResponseBuilder.class
 com\student\dashboard\server\security\AuthTokenFilter.class
 com\student\dashboard\server\config\CorsConfig.class
 com\student\dashboard\server\entity\Attendance$AttendanceBuilderImpl.class
 com\student\dashboard\server\dto\AttendanceSummaryDTO$AttendanceSummaryDTOBuilder.class
+com\student\dashboard\server\controller\AiController.class
 com\student\dashboard\server\controller\ExamController.class
 com\student\dashboard\server\controller\AttendanceController.class
 com\student\dashboard\server\dto\MessageDTO$MessageDTOBuilder.class
 com\student\dashboard\server\dto\DashboardSummaryDTO$DashboardSummaryDTOBuilder.class
+com\student\dashboard\server\service\GroqAiService$FeedbackResult.class
 com\student\dashboard\server\dto\MessageRequest.class
 com\student\dashboard\server\controller\ScheduleController.class
 com\student\dashboard\server\dto\UserProfileDTO.class

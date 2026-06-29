@@ -76,6 +76,22 @@ public class AssignmentController {
                 "Submissions retrieved successfully"));
     }
 
+    @GetMapping("/{uuid}/my-submission")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<AssignmentSubmissionDTO>> getMySubmission(
+            @PathVariable UUID uuid,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        // Find the submission for this student and assignment
+        List<AssignmentSubmissionDTO> submissions = assignmentService.getSubmissionsForAssignment(uuid);
+        AssignmentSubmissionDTO mySubmission = submissions.stream()
+                .filter(sub -> sub.getStudentUuid().equals(userDetails.getUuid()))
+                .findFirst()
+                .orElse(null);
+        return ResponseEntity.ok(ApiResponse.success(
+                mySubmission,
+                "Submission retrieved successfully"));
+    }
+
     @PostMapping("/submissions/{uuid}/grade")
     @org.springframework.security.access.prepost.PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<AssignmentSubmissionDTO>> gradeSubmission(

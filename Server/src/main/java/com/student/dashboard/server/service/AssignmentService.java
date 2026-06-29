@@ -24,6 +24,7 @@ public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
     private final AssignmentSubmissionRepository submissionRepository;
     private final UserRepository userRepository;
+    private final GroqAiService groqAiService;
 
     @Transactional(readOnly = true)
     public List<AssignmentDTO> getAllAssignments() {
@@ -89,6 +90,16 @@ public class AssignmentService {
         submission.setStudent(student);
         submission.setContent(content);
         submission.setSubmittedAt(LocalDateTime.now());
+        
+        // Use Real Groq API for Feedback
+        GroqAiService.FeedbackResult feedbackResult = groqAiService.generateFeedbackAndScore(
+                assignment.getTitle(),
+                assignment.getDescription() != null ? assignment.getDescription() : "No description provided.",
+                content
+        );
+        
+        submission.setFeedback(feedbackResult.getFeedback());
+        submission.setScore(feedbackResult.getScore());
 
         return toSubmissionDto(submissionRepository.save(submission));
     }

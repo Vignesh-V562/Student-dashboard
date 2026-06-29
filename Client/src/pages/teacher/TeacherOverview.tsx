@@ -64,7 +64,7 @@ const TeacherOverview = () => {
                             <Users size={20} />
                         </div>
                         <div>
-                            <p className="glass-muted text-sm font-medium">Total Students</p>
+                            <p className="glass-muted text-sm font-medium">Total Mentees</p>
                             <h3 className="glass-stat-value text-xl font-bold">{summary?.totalStudents || 0}</h3>
                         </div>
                     </div>
@@ -76,7 +76,7 @@ const TeacherOverview = () => {
                             <FileText size={20} />
                         </div>
                         <div>
-                            <p className="glass-muted text-sm font-medium">Total Exams</p>
+                            <p className="glass-muted text-sm font-medium">Total Assessments</p>
                             <h3 className="glass-stat-value text-xl font-bold">{summary?.totalExams || 0}</h3>
                         </div>
                     </div>
@@ -88,7 +88,7 @@ const TeacherOverview = () => {
                             <ClipboardList size={20} />
                         </div>
                         <div>
-                            <p className="glass-muted text-sm font-medium">Assignments</p>
+                            <p className="glass-muted text-sm font-medium">Projects</p>
                             <h3 className="glass-stat-value text-xl font-bold">{summary?.totalAssignments || 0}</h3>
                         </div>
                     </div>
@@ -100,7 +100,7 @@ const TeacherOverview = () => {
                             <UserCheck size={20} />
                         </div>
                         <div>
-                            <p className="glass-muted text-sm font-medium">Avg Attendance</p>
+                            <p className="glass-muted text-sm font-medium">Engagement Rate</p>
                             <h3 className="glass-stat-value text-xl font-bold">{summary?.avgAttendance || 0}%</h3>
                         </div>
                     </div>
@@ -109,7 +109,7 @@ const TeacherOverview = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="glass-card flex flex-col h-96 p-6">
-                    <h2 className="text-xl font-semibold text-white mb-6">Attendance Trends (Last 7 Days)</h2>
+                    <h2 className="text-xl font-semibold text-white mb-6">Engagement Trends (Last 7 Days)</h2>
                     <div className="flex-1 w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={attendanceData}>
@@ -126,7 +126,7 @@ const TeacherOverview = () => {
                 </div>
 
                 <div className="glass-card flex flex-col h-96 p-6">
-                    <h2 className="text-xl font-semibold text-white mb-6">Class Grade Distribution</h2>
+                    <h2 className="text-xl font-semibold text-white mb-6">Skill Growth Trajectory</h2>
                     <div className="flex-1 w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={gradeData}>
@@ -146,9 +146,9 @@ const TeacherOverview = () => {
             <div className="glass-card p-6">
                 <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
                 <div className="flex flex-wrap gap-4">
-                    <button className="glass-btn-primary px-6 py-3">Create Exam</button>
-                    <button className="glass-btn-primary px-6 py-3">Post Assignment</button>
-                    <button className="glass-btn-primary px-6 py-3">Mark Attendance</button>
+                    <button className="glass-btn-primary px-6 py-3">Create Assessment</button>
+                    <button className="glass-btn-primary px-6 py-3">Post Project</button>
+                    <button className="glass-btn-primary px-6 py-3">Track Engagement</button>
                 </div>
             </div>
         </div>

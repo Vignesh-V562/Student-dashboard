@@ -21,6 +21,7 @@ import ManageExams from './pages/teacher/ManageExams';
 import ManageAssignments from './pages/teacher/ManageAssignments';
 import MarkAttendance from './pages/teacher/MarkAttendance';
 import StudentRoster from './pages/teacher/StudentRoster';
+import AiStudyAssistant from './components/AiStudyAssistant';
 import { PanelRightClose, PanelRightOpen } from 'lucide-react';
 
 const ExamDashboard = () => {
@@ -71,24 +72,31 @@ const ExamDashboard = () => {
       case 'Overview':
         return user?.role === 'TEACHER' ? <TeacherOverview /> : <OverviewPage />;
       case 'Exams':
+      case 'Assessments':
         return <ExamsPage />;
       case 'Assignments':
+      case 'Projects':
         return <AssignmentsPage />;
       case 'Attendance':
         return <AttendancePage />;
       case 'Schedule':
         return <SchedulePage />;
       case 'GPA Calculator':
+      case 'Skill Growth':
         return <GPACalculatorPage />;
       case 'Messages':
+      case 'Ask AI':
         return <MessagesPage />;
       case 'Manage Exams':
         return <ManageExams />;
       case 'Manage Assignments':
+      case 'Manage Projects':
         return <ManageAssignments />;
       case 'Mark Attendance':
+      case 'Track Attendance':
         return <MarkAttendance />;
       case 'Student Roster':
+      case 'Mentee Roster':
         return <StudentRoster />;
       default:
         return (
@@ -159,6 +167,8 @@ const ExamDashboard = () => {
       >
         <RightSidebar upcomingExams={upcomingExams} />
       </div>
+
+      {user?.role !== 'TEACHER' && <AiStudyAssistant />}
     </div>
   );
 };

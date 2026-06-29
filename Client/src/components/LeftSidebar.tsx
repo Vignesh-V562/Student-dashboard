@@ -18,8 +18,8 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ menuItems, activeTab, onPageC
             <GraduationCap className="h-5 w-5 text-cyan-300" strokeWidth={1.75} />
           </div>
           <div>
-            <span className="glass-heading block text-base">{user?.role === 'TEACHER' ? 'Teacher Hub' : 'Student Hub'}</span>
-            <span className="glass-muted text-xs">{user?.role === 'TEACHER' ? 'Management Console' : 'Academic Portal'}</span>
+            <span className="glass-heading block text-base">{user?.role === 'TEACHER' ? 'Mentor Hub' : 'Mentee Hub'}</span>
+            <span className="glass-muted text-xs">{user?.role === 'TEACHER' ? 'Management Console' : 'Mentorship Portal'}</span>
           </div>
         </div>
       </div>

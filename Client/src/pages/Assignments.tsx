@@ -9,6 +9,10 @@ const AssignmentsPage: React.FC = () => {
 
     const [submittingAssignment, setSubmittingAssignment] = useState<AssignmentApi | null>(null);
     const [submissionContent, setSubmissionContent] = useState('');
+    
+    const [viewingFeedbackFor, setViewingFeedbackFor] = useState<AssignmentApi | null>(null);
+    const [feedbackData, setFeedbackData] = useState<any | null>(null);
+    const [feedbackLoading, setFeedbackLoading] = useState(false);
 
     const loadAssignments = () => {
         setLoading(true);
@@ -35,14 +39,30 @@ const AssignmentsPage: React.FC = () => {
             await submitAssignment(submittingAssignment.uuid, submissionContent);
             setSubmittingAssignment(null);
             setSubmissionContent('');
-            alert('Assignment submitted successfully!');
+            alert('Project submitted successfully! AI Feedback is being generated.');
             loadAssignments();
         } catch (error) {
-            alert('Failed to submit assignment');
+            alert('Failed to submit project');
         }
     };
 
-    if (loading) return <div className="glass-loading">Loading assignments…</div>;
+    const handleViewFeedback = async (assignment: AssignmentApi) => {
+        setViewingFeedbackFor(assignment);
+        setFeedbackLoading(true);
+        try {
+            const { fetchMySubmission } = await import('../services/api');
+            const res = await fetchMySubmission(assignment.uuid);
+            if (res.success) {
+                setFeedbackData(res.data);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setFeedbackLoading(false);
+        }
+    };
+
+    if (loading) return <div className="glass-loading">Loading projects…</div>;
     if (error) return <div className="auth-error rounded-xl p-4 text-center text-sm">{error}</div>;
 
     return (
@@ -74,9 +94,15 @@ const AssignmentsPage: React.FC = () => {
                                         {status}
                                     </p>
                                 </div>
-                                <button onClick={() => setSubmittingAssignment(assignment)} className="glass-btn-primary px-4 py-2 text-sm">
-                                    Submit
-                                </button>
+                                {assignment.completed ? (
+                                    <button onClick={() => handleViewFeedback(assignment)} className="glass-btn-primary px-4 py-2 text-sm bg-purple-500/20 hover:bg-purple-500/30 text-purple-300">
+                                        View AI Feedback
+                                    </button>
+                                ) : (
+                                    <button onClick={() => setSubmittingAssignment(assignment)} className="glass-btn-primary px-4 py-2 text-sm">
+                                        Submit Work
+                                    </button>
+                                )}
                             </div>
                         </div>
                     );
@@ -86,7 +112,7 @@ const AssignmentsPage: React.FC = () => {
             {submittingAssignment && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
                     <div className="glass-modal w-full max-w-md p-6">
-                        <h2 className="glass-heading mb-6 text-xl">Submit Assignment</h2>
+                        <h2 className="glass-heading mb-6 text-xl">Submit Project</h2>
                         <h3 className="text-white font-medium mb-4">{submittingAssignment.title}</h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
@@ -95,9 +121,38 @@ const AssignmentsPage: React.FC = () => {
                             </div>
                             <div className="mt-6 flex justify-end gap-3">
                                 <button type="button" onClick={() => setSubmittingAssignment(null)} className="glass-btn-icon px-4">Cancel</button>
-                                <button type="submit" className="glass-btn-primary px-4">Submit Work</button>
+                                <button type="submit" className="glass-btn-primary px-4">Submit Work & Get AI Feedback</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {viewingFeedbackFor && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+                    <div className="glass-modal w-full max-w-md p-6">
+                        <h2 className="glass-heading mb-6 text-xl">Project Feedback</h2>
+                        {feedbackLoading ? (
+                            <div className="flex h-32 items-center justify-center">
+                                <div className="h-6 w-6 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+                            </div>
+                        ) : feedbackData ? (
+                            <div className="space-y-4">
+                                <div className="glass-card p-4">
+                                    <h3 className="text-sm font-semibold text-cyan-300 uppercase tracking-wider mb-2">Score</h3>
+                                    <p className="text-2xl font-bold text-white">{feedbackData.score ?? 'Pending'} / 100</p>
+                                </div>
+                                <div className="glass-card p-4">
+                                    <h3 className="text-sm font-semibold text-cyan-300 uppercase tracking-wider mb-2">AI / Mentor Feedback</h3>
+                                    <p className="text-white text-sm whitespace-pre-wrap">{feedbackData.feedback || 'No feedback provided yet.'}</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="glass-muted">Could not load feedback.</p>
+                        )}
+                        <div className="mt-6 flex justify-end">
+                            <button type="button" onClick={() => setViewingFeedbackFor(null)} className="glass-btn-primary px-6">Close</button>
+                        </div>
                     </div>
                 </div>
             )}

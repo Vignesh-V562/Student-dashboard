@@ -14,31 +14,31 @@ interface MainContentProps {
 const MainContent: React.FC<MainContentProps> = ({ darkMode, activeTab, setDarkMode, username, userRole, children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const getPageTitle = () => {
+    const getPageTitle = () => {
     switch (activeTab) {
-      case 'Exams': return 'Exams';
+      case 'Assessments': return 'Assessments';
       case 'Overview': return 'Dashboard Overview';
       case 'Attendance': return 'Attendance Records';
-      case 'Assignments': return 'Assignments';
+      case 'Projects': return 'Projects';
       case 'Schedule': return 'Weekly Schedule';
-      case 'GPA Calculator': return 'GPA Calculator';
-      case 'Messages': return 'Messages';
-      case 'Manage Exams': return 'Manage Exams';
-      case 'Manage Assignments': return 'Manage Assignments';
-      case 'Mark Attendance': return 'Mark Attendance';
-      case 'Student Roster': return 'Student Roster';
+      case 'Skill Growth': return 'Skill Growth Analytics';
+      case 'Ask AI': return 'AI Study Assistant';
+      case 'Manage Exams': return 'Manage Assessments';
+      case 'Manage Projects': return 'Manage Projects';
+      case 'Track Attendance': return 'Track Attendance';
+      case 'Mentee Roster': return 'Mentee Roster';
       default: return activeTab;
     }
   };
 
   const getPageSubtitle = () => {
     switch (activeTab) {
-      case 'Exams': return 'View your upcoming examination schedule and details.';
-      case 'Overview': return `Welcome back, ${username ?? 'User'}! Here is what is happening with your studies.`;
-      case 'Manage Exams': return 'Create and manage examinations for your students.';
-      case 'Manage Assignments': return 'Assign homework and track student submissions.';
-      case 'Mark Attendance': return 'Record daily attendance for your classes.';
-      case 'Student Roster': return 'View all enrolled students and their academic standing.';
+      case 'Assessments': return 'View your upcoming assessment schedule and details.';
+      case 'Overview': return `Welcome back, ${username ?? 'User'}! Here is what is happening with your tracks.`;
+      case 'Manage Exams': return 'Create and manage assessments for your mentees.';
+      case 'Manage Projects': return 'Assign projects and provide feedback on submissions.';
+      case 'Track Attendance': return 'Record daily engagement for your cohorts.';
+      case 'Mentee Roster': return 'View all your mentees and their academic standing.';
       default: return `Manage your ${activeTab.toLowerCase()} and progress.`;
     }
   };

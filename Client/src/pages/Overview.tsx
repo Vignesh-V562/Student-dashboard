@@ -16,10 +16,10 @@ const OverviewPage: React.FC = () => {
     }, []);
 
     const stats = [
-        { label: 'Pending Exams', value: summary?.pendingExams?.toString() ?? '0', icon: GraduationCap, iconClass: 'glass-stat-icon-purple' },
-        { label: 'Completed Exams', value: summary?.completedExams?.toString() ?? '0', icon: Users, iconClass: 'glass-stat-icon-blue' },
-        { label: 'Enrolled Courses', value: summary?.enrolledCourses?.toString() ?? '0', icon: BookOpen, iconClass: 'glass-stat-icon-green' },
-        { label: 'Total Exams', value: summary?.totalExams?.toString() ?? '0', icon: GraduationCap, iconClass: 'glass-stat-icon-orange' },
+        { label: 'Pending Assessments', value: summary?.pendingExams?.toString() ?? '0', icon: GraduationCap, iconClass: 'glass-stat-icon-purple' },
+        { label: 'Completed Assessments', value: summary?.completedExams?.toString() ?? '0', icon: Users, iconClass: 'glass-stat-icon-blue' },
+        { label: 'Enrolled Tracks', value: summary?.enrolledCourses?.toString() ?? '0', icon: BookOpen, iconClass: 'glass-stat-icon-green' },
+        { label: 'Total Assessments', value: summary?.totalExams?.toString() ?? '0', icon: GraduationCap, iconClass: 'glass-stat-icon-orange' },
     ];
 
     if (loading) return <div className="glass-loading">Loading summary…</div>;

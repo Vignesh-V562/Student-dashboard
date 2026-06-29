@@ -3,20 +3,20 @@ import type { MenuItem } from '../types';
 
 export const STUDENT_MENU_ITEMS: MenuItem[] = [
     { icon: Home, label: 'Overview', active: true },
-    { icon: FileText, label: 'Exams', active: false },
-    { icon: ClipboardList, label: 'Assignments', active: false },
+    { icon: FileText, label: 'Assessments', active: false },
+    { icon: ClipboardList, label: 'Projects', active: false },
     { icon: UserCheck, label: 'Attendance', active: false },
     { icon: Calendar, label: 'Schedule', active: false },
-    { icon: Calculator, label: 'GPA Calculator', active: false },
-    { icon: MessageSquare, label: 'Messages', active: false },
+    { icon: Calculator, label: 'Skill Growth', active: false },
+    { icon: MessageSquare, label: 'Ask AI', active: false },
 ];
 
 export const TEACHER_MENU_ITEMS: MenuItem[] = [
     { icon: Home, label: 'Overview', active: true },
-    { icon: FileText, label: 'Manage Exams', active: false },
-    { icon: ClipboardList, label: 'Manage Assignments', active: false },
-    { icon: CheckSquare, label: 'Mark Attendance', active: false },
-    { icon: Users, label: 'Student Roster', active: false },
+    { icon: FileText, label: 'Assessments', active: false },
+    { icon: ClipboardList, label: 'Manage Projects', active: false },
+    { icon: CheckSquare, label: 'Track Attendance', active: false },
+    { icon: Users, label: 'Mentee Roster', active: false },
     { icon: MessageSquare, label: 'Messages', active: false },
 ];
 

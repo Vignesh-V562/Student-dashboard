@@ -37,7 +37,7 @@ const StudentRoster = () => {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={20} />
                 <input 
                     type="text" 
-                    placeholder="Search students by name or email..." 
+                    placeholder="Search mentees by name or email..." 
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     className="glass-modal-input w-full pl-12"
@@ -64,7 +64,7 @@ const StudentRoster = () => {
                         </div>
                         
                         <div className="mt-6 flex w-full gap-2">
-                            <button className="glass-btn-primary flex-1 py-2 text-sm">View Profile</button>
+                            <button className="glass-btn-primary flex-1 py-2 text-sm">View Portfolio</button>
                             <button className="glass-btn-icon">
                                 <Mail size={16} />
                             </button>
@@ -74,7 +74,7 @@ const StudentRoster = () => {
 
                 {filteredStudents.length === 0 && (
                     <div className="col-span-full py-12 text-center text-white/50">
-                        No students found matching your search.
+                        No mentees found matching your search.
                     </div>
                 )}
             </div>

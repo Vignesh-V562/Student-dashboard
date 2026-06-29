@@ -119,7 +119,10 @@ import type { AssignmentSubmissionDTO, AttendanceTrend, GradeDistribution } from
 
 export const submitAssignment = (uuid: string, content: string) => apiFetch<AssignmentSubmissionDTO>(`/assignments/${uuid}/submit`, { method: 'POST', body: JSON.stringify({ content }) });
 export const fetchSubmissions = (uuid: string) => apiFetch<AssignmentSubmissionDTO[]>(`/assignments/${uuid}/submissions`);
+export const fetchMySubmission = (uuid: string) => apiFetch<AssignmentSubmissionDTO>(`/assignments/${uuid}/my-submission`);
 export const gradeSubmission = (uuid: string, score: number, feedback: string) => apiFetch<AssignmentSubmissionDTO>(`/assignments/submissions/${uuid}/grade`, { method: 'POST', body: JSON.stringify({ score, feedback }) });
+
+export const sendChatMessage = (messages: { role: string; content: string }[]) => apiFetch<{ text: string }>('/ai/chat', { method: 'POST', body: JSON.stringify({ messages }) });
 
 export const fetchAttendanceTrends = () => apiFetch<AttendanceTrend[]>('/dashboard/attendance-trends');
 export const fetchGradeDistribution = () => apiFetch<GradeDistribution[]>('/dashboard/grade-distribution');

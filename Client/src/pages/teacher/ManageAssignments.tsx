@@ -58,7 +58,7 @@ const ManageAssignments = () => {
     };
 
     const handleDelete = (uuid: string) => {
-        if (window.confirm('Are you sure you want to delete this assignment?')) {
+        if (window.confirm('Are you sure you want to delete this project?')) {
             deleteAssignment(uuid).then(() => loadAssignments());
         }
     };
@@ -71,7 +71,7 @@ const ManageAssignments = () => {
             setNewAssignment({ title: '', description: '', dueDate: '', subjectName: '' });
             loadAssignments();
         } catch (error) {
-            alert('Failed to create assignment');
+            alert('Failed to create project');
         }
     };
 
@@ -88,7 +88,7 @@ const ManageAssignments = () => {
             <div className="glass-page-enter space-y-6">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold text-white">Submissions</h2>
-                    <button onClick={() => setSelectedAssignment(null)} className="glass-btn-icon px-4">Back to Assignments</button>
+                    <button onClick={() => setSelectedAssignment(null)} className="glass-btn-icon px-4">Back to Projects</button>
                 </div>
                 {submissions.length === 0 ? (
                     <div className="glass-card p-12 text-center text-white/50">No submissions yet.</div>
@@ -105,14 +105,14 @@ const ManageAssignments = () => {
                                 </div>
                                 <div className="mt-4 flex justify-between items-center">
                                     <div>
-                                        {sub.score !== null ? (
-                                            <span className="glass-badge bg-green-500/20 text-green-300">Grade: {sub.score}/100</span>
-                                        ) : (
-                                            <span className="glass-badge bg-yellow-500/20 text-yellow-300">Needs Grading</span>
-                                        )}
+                                        <div className="flex gap-2">
+                                            {sub.score !== null && (
+                                                <span className="glass-badge bg-purple-500/20 text-purple-300">AI Score: {sub.score}/100</span>
+                                            )}
+                                        </div>
                                     </div>
                                     <button onClick={() => setGradingSubmission(sub.uuid)} className="text-cyan-400 hover:text-cyan-300 text-sm font-semibold">
-                                        {sub.score !== null ? 'Update Grade' : 'Grade Submission'}
+                                        Review & Grade
                                     </button>
                                 </div>
                             </div>
@@ -123,15 +123,15 @@ const ManageAssignments = () => {
                 {gradingSubmission && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
                         <div className="glass-modal w-full max-w-md p-6">
-                            <h2 className="glass-heading mb-6 text-xl">Grade Submission</h2>
+                            <h2 className="glass-heading mb-6 text-xl">Review & Provide Feedback</h2>
                             <form onSubmit={handleGrade} className="space-y-4">
                                 <div>
-                                    <label className="glass-muted mb-1 block text-sm">Score (0-100)</label>
+                                    <label className="glass-muted mb-1 block text-sm">Final Mentor Score (0-100)</label>
                                     <input required type="number" min="0" max="100" className="glass-modal-input w-full" value={score} onChange={e => setScore(e.target.value)} />
                                 </div>
                                 <div>
-                                    <label className="glass-muted mb-1 block text-sm">Feedback</label>
-                                    <textarea className="glass-modal-input w-full" value={feedback} onChange={e => setFeedback(e.target.value)} />
+                                    <label className="glass-muted mb-1 block text-sm">Mentor Feedback</label>
+                                    <textarea className="glass-modal-input w-full min-h-[100px]" value={feedback} onChange={e => setFeedback(e.target.value)} placeholder="Provide additional feedback to supplement the AI..." />
                                 </div>
                                 <div className="mt-6 flex justify-end gap-3">
                                     <button type="button" onClick={() => setGradingSubmission(null)} className="glass-btn-icon px-4">Cancel</button>
@@ -149,13 +149,13 @@ const ManageAssignments = () => {
         <div className="space-y-6">
             <div className="flex justify-end">
                 <button onClick={() => setIsModalOpen(true)} className="glass-btn-primary">
-                    Create Assignment
+                    Create Project
                 </button>
             </div>
 
             {assignments.length === 0 ? (
                 <div className="glass-card p-12 text-center">
-                    <p className="glass-muted">No assignments created yet.</p>
+                    <p className="glass-muted">No projects created yet.</p>
                 </div>
             ) : (
                 <div className="grid gap-4">
@@ -187,7 +187,7 @@ const ManageAssignments = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
                     <div className="glass-modal w-full max-w-md p-6">
-                        <h2 className="glass-heading mb-6 text-xl">Create Assignment</h2>
+                        <h2 className="glass-heading mb-6 text-xl">Create Project</h2>
                         <form onSubmit={handleCreate} className="space-y-4">
                             <div>
                                 <label className="glass-muted mb-1 block text-sm">Title</label>
@@ -202,7 +202,7 @@ const ManageAssignments = () => {
                                 <input required type="datetime-local" className="glass-modal-input w-full" value={newAssignment.dueDate} onChange={e => setNewAssignment({ ...newAssignment, dueDate: e.target.value })} />
                             </div>
                             <div>
-                                <label className="glass-muted mb-1 block text-sm">Subject</label>
+                                <label className="glass-muted mb-1 block text-sm">Skill Track</label>
                                 <input required type="text" className="glass-modal-input w-full" value={newAssignment.subjectName} onChange={e => setNewAssignment({ ...newAssignment, subjectName: e.target.value })} />
                             </div>
                             <div className="mt-6 flex justify-end gap-3">
