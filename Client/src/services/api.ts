@@ -126,11 +126,7 @@ export const sendChatMessage = (messages: { role: string; content: string }[]) =
 
 export const fetchAttendanceTrends = () => apiFetch<AttendanceTrend[]>('/dashboard/attendance-trends');
 export const fetchGradeDistribution = () => apiFetch<GradeDistribution[]>('/dashboard/grade-distribution');
-export const downloadAttendanceCsv = () => {
-    const token = localStorage.getItem('token');
-    window.open(`${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/api/v1'}/reports/attendance/csv?access_token=${token}`, '_blank');
-    // For proper auth via header, we would need to fetch blob and create object URL, but let's do the proper fetch blob approach:
-};
+
 
 export const downloadCsv = async () => {
     const headers: Record<string, string> = {};

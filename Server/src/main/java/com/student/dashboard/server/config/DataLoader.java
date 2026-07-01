@@ -17,7 +17,6 @@ import java.time.LocalTime;
 import java.util.Arrays;
 
 @Configuration
-@Profile("dev")
 @RequiredArgsConstructor
 public class DataLoader {
 
