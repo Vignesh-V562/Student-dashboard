@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-01T11:26:23+0530",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
+    date = "2026-07-01T11:33:26+0530",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.9 (Oracle Corporation)"
 )
 @Component
 public class ExamMapperImpl implements ExamMapper {
@@ -25,14 +25,14 @@ public class ExamMapperImpl implements ExamMapper {
 
         examDTO.setCourseName( examCourseName( exam ) );
         examDTO.setSubjectName( examSubjectName( exam ) );
+        examDTO.setUuid( exam.getUuid() );
+        examDTO.setTitle( exam.getTitle() );
         examDTO.setDescription( exam.getDescription() );
+        examDTO.setScheduledAt( exam.getScheduledAt() );
         examDTO.setDurationMinutes( exam.getDurationMinutes() );
         examDTO.setMaxMarks( exam.getMaxMarks() );
         examDTO.setPassingMarks( exam.getPassingMarks() );
-        examDTO.setScheduledAt( exam.getScheduledAt() );
         examDTO.setStatus( exam.getStatus() );
-        examDTO.setTitle( exam.getTitle() );
-        examDTO.setUuid( exam.getUuid() );
 
         return examDTO;
     }
@@ -45,13 +45,13 @@ public class ExamMapperImpl implements ExamMapper {
 
         Exam.ExamBuilder<?, ?> exam = Exam.builder();
 
+        exam.title( examDTO.getTitle() );
         exam.description( examDTO.getDescription() );
+        exam.scheduledAt( examDTO.getScheduledAt() );
         exam.durationMinutes( examDTO.getDurationMinutes() );
         exam.maxMarks( examDTO.getMaxMarks() );
         exam.passingMarks( examDTO.getPassingMarks() );
-        exam.scheduledAt( examDTO.getScheduledAt() );
         exam.status( examDTO.getStatus() );
-        exam.title( examDTO.getTitle() );
 
         return exam.build();
     }
